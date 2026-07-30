@@ -1,66 +1,108 @@
 'use client';
 
-import React from 'react';
-import { Cpu, Layout, Server, Wrench, Sparkles, CheckCircle2 } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Cpu, Sparkles, CheckCircle2 } from 'lucide-react';
+import { SKILL_CATEGORIES } from '../data/skillsData';
 
-interface SkillCategory {
-  title: string;
-  icon: React.ReactNode;
-  description: string;
-  skills: {
-    name: string;
-    level?: string; // Opcional, por si quieres poner "Avanzado", "Experto", etc.
-    featured?: boolean; // Para resaltar tecnologías clave
-  }[];
+// Componente para manejar la animación de cada tarjeta de Skills
+function SkillCategoryCard({ 
+  cat, 
+  index 
+}: { 
+  cat: typeof SKILL_CATEGORIES[0]; 
+  index: number 
+}) {
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const IconComponent = cat.icon;
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -40px 0px',
+      }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={cardRef}
+      style={{ transitionDelay: `${index * 120}ms` }}
+      className={`bg-bg-card border border-border-main hover:border-accent/50 rounded-2xl p-6 flex flex-col justify-between transition-all duration-700 ease-out hover:shadow-2xl hover:-translate-y-1.5 h-full transform group/card ${
+        isVisible
+          ? 'opacity-100 translate-y-0 scale-100'
+          : 'opacity-0 translate-y-8 scale-95 pointer-events-none'
+      }`}
+    >
+      <div>
+        {/* Encabezado */}
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-2.5 rounded-xl bg-bg-main border border-border-main shrink-0 transition-transform duration-300 group-hover/card:scale-110 group-hover/card:border-accent/40">
+            <IconComponent className="w-5 h-5 text-accent" />
+          </div>
+          <h3 className="text-xl font-bold text-text-main group-hover/card:text-accent transition-colors">
+            {cat.title}
+          </h3>
+        </div>
+
+        <p className="text-text-muted text-xs sm:text-sm leading-relaxed mb-6 min-h-[40px]">
+          {cat.description}
+        </p>
+
+        {/* Lista de Habilidades con animación en casillero y hover interactivo */}
+        <div className="flex flex-wrap gap-2 group/skills">
+          {cat.skills.map((skill, skillIdx) => (
+            <div
+              key={skill.name}
+              style={{
+                transitionDelay: isVisible ? `${(index * 120) + (skillIdx * 40)}ms` : '0ms',
+              }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono border transition-all duration-300 cursor-default transform hover:scale-105 hover:z-10 ${
+                skill.featured
+                  ? 'bg-bg-main border-accent/40 text-text-main font-medium shadow-sm hover:border-accent hover:shadow-accent/20'
+                  : 'bg-bg-main/50 border-border-main text-text-muted hover:border-accent/50 hover:text-text-main'
+              } ${
+                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+              }`}
+            >
+              <CheckCircle2
+                className={`w-3.5 h-3.5 transition-colors ${
+                  skill.featured ? 'text-accent' : 'text-text-muted/60'
+                }`}
+              />
+              <span>{skill.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Pie de Tarjeta */}
+      <div className="mt-8 pt-4 border-t border-border-main/50 flex items-center justify-between text-[11px] font-mono text-text-muted">
+        <span>{cat.skills.length} Tecnologías</span>
+        <span className="flex items-center gap-1 text-accent font-semibold">
+          <Sparkles className="w-3 h-3 animate-pulse" /> Dominado
+        </span>
+      </div>
+    </div>
+  );
 }
-
-const SKILL_CATEGORIES: SkillCategory[] = [
-  {
-    title: 'Frontend & UI',
-    icon: <Layout className="w-5 h-5 text-accent" />,
-    description: 'Especializado en la creación de interfaces web modernas, reactivas y accesibles.',
-    skills: [
-      { name: 'React.js', featured: true },
-      { name: 'Next.js', featured: true },
-      { name: 'TypeScript', featured: true },
-      { name: 'Tailwind CSS', featured: true },
-      { name: 'JavaScript (ES6+)', featured: true },
-      { name: 'HTML5 / CSS3' },
-      { name: 'Jest / Testing' },
-      { name: 'Zustand / Redux' },
-    ],
-  },
-  {
-    title: 'Backend & Tiempo Real',
-    icon: <Server className="w-5 h-5 text-accent" />,
-    description: 'Desarrollo de servicios robustos, comunicación en tiempo real e integración con BDD.',
-    skills: [
-      { name: 'Python', featured: true },
-      { name: 'Node.js', featured: true },
-      { name: 'WebSockets', featured: true },
-      { name: 'REST APIs', featured: true },
-      { name: 'PostgreSQL' },
-      { name: 'FastAPI / Express' },
-    ],
-  },
-  {
-    title: 'Herramientas & WPO',
-    icon: <Wrench className="w-5 h-5 text-accent" />,
-    description: 'Flujo de trabajo, control de versiones y optimización de rendimiento web.',
-    skills: [
-      { name: 'Git / GitHub', featured: true },
-      { name: 'WPO (Core Web Vitals)', featured: true },
-      { name: 'Docker' },
-      { name: 'Scrum / Kanban' },
-      { name: 'Vercel / CI/CD' },
-      { name: 'Figma to Code' },
-    ],
-  },
-];
 
 export default function Skills() {
   return (
-    <section id="habilidades" className="py-20 px-4 relative z-10 max-w-6xl mx-auto">
+    <section id="habilidades" className="py-20 px-4 relative z-10 max-w-6xl mx-auto overflow-hidden">
       
       {/* Header de la Sección */}
       <div className="mb-16 text-center md:text-left">
@@ -76,59 +118,11 @@ export default function Skills() {
       </div>
 
       {/* Grid de Categorías */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {SKILL_CATEGORIES.map((cat, idx) => (
-          <div
-            key={idx}
-            className="bg-bg-card border border-border-main hover:border-accent/50 rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
-          >
-            <div>
-              {/* Encabezado de la Categoría */}
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2.5 rounded-xl bg-bg-main border border-border-main">
-                  {cat.icon}
-                </div>
-                <h3 className="text-xl font-bold text-text-main">{cat.title}</h3>
-              </div>
-
-              <p className="text-text-muted text-xs sm:text-sm leading-relaxed mb-6">
-                {cat.description}
-              </p>
-
-              {/* Lista de Habilidades */}
-              <div className="flex flex-wrap gap-2">
-                {cat.skills.map((skill) => (
-                  <div
-                    key={skill.name}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono border transition-all ${
-                      skill.featured
-                        ? 'bg-bg-main border-accent/40 text-text-main font-medium shadow-sm'
-                        : 'bg-bg-main/50 border-border-main text-text-muted'
-                    }`}
-                  >
-                    <CheckCircle2
-                      className={`w-3.5 h-3.5 ${
-                        skill.featured ? 'text-accent' : 'text-text-muted/60'
-                      }`}
-                    />
-                    <span>{skill.name}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Pie de Tarjeta decorativo */}
-            <div className="mt-8 pt-4 border-t border-border-main/50 flex items-center justify-between text-[11px] font-mono text-text-muted">
-              <span>{cat.skills.length} Tecnologías</span>
-              <span className="flex items-center gap-1 text-accent">
-                <Sparkles className="w-3 h-3" /> Dominado
-              </span>
-            </div>
-
-          </div>
+          <SkillCategoryCard key={idx} cat={cat} index={idx} />
         ))}
       </div>
-
     </section>
   );
 }

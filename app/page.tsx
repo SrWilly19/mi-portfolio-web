@@ -15,7 +15,7 @@ export default function Home() {
       <Projects />
       {/* Experience Section */}
       <Experience />
-      {/* Skills Section */}
+      {/* Skills Section  sa*/}
       <Skills />
       {/* Footer Section */}
       <Footer />

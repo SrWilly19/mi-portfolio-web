@@ -9,9 +9,50 @@ interface Message {
   text: string;
 }
 
+// Lista de roles para la animación
+const ROLES = [
+  'Full Stack Developer',
+  'Frontend Developer',
+  'Backend Developer',
+  'Especialista SEO / WPO',
+];
+
 export default function Hero() {
-  // Pestaña activa por defecto ahora es 'chat'
   const [activeTab, setActiveTab] = useState<'chat' | 'terminal'>('chat');
+
+  // Lógica del Efecto Máquina de Escribir (Typewriter)
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [displayedText, setDisplayedText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentRole = ROLES[roleIndex];
+    let typingSpeed = isDeleting ? 40 : 80; // Borra más rápido de lo que escribe
+
+    if (!isDeleting && displayedText === currentRole) {
+      // Pausa cuando termina de escribir la palabra completa
+      typingSpeed = 2000;
+    } else if (isDeleting && displayedText === '') {
+      // Pasa al siguiente rol cuando termina de borrar
+      setIsDeleting(false);
+      setRoleIndex((prev) => (prev + 1) % ROLES.length);
+      typingSpeed = 500;
+    }
+
+    const timer = setTimeout(() => {
+      setDisplayedText((prev) =>
+        isDeleting
+          ? currentRole.substring(0, prev.length - 1)
+          : currentRole.substring(0, prev.length + 1)
+      );
+
+      if (!isDeleting && displayedText === currentRole) {
+        setIsDeleting(true);
+      }
+    }, typingSpeed);
+
+    return () => clearTimeout(timer);
+  }, [displayedText, isDeleting, roleIndex]);
 
   // Estados del Chat IA
   const [messages, setMessages] = useState<Message[]>([
@@ -25,22 +66,19 @@ export default function Hero() {
   const [loading, setLoading] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll al final del chat cuando hay mensajes o cambiamos a la pestaña
   useEffect(() => {
-  if (activeTab === 'chat' && chatContainerRef.current) {
-    chatContainerRef.current.scrollTo({
-      top: chatContainerRef.current.scrollHeight,
-      behavior: 'smooth',
-    });
-  }
-}, [messages, activeTab]);
+    if (activeTab === 'chat' && chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  }, [messages, activeTab]);
 
-  // Función para enviar mensaje a la IA
   const handleSend = async (textToSend?: string) => {
     const userText = textToSend || input;
     if (!userText.trim() || loading) return;
 
-    // Aseguramos estar en la pestaña del chat
     if (activeTab !== 'chat') setActiveTab('chat');
 
     const userMsg: Message = {
@@ -100,7 +138,7 @@ export default function Hero() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
             </span>
-            Disponible para roles Remotos / Valencia, ES
+            Disponible para roles Remotos o en Valencia, ES
           </div>
 
           <div>
@@ -108,9 +146,12 @@ export default function Hero() {
               Wellington <br />
               <span className="text-accent">Hidalgo</span>
             </h1>
-            <p className="text-xl sm:text-2xl text-text-muted font-mono mt-2 flex items-center gap-2">
-              <span className="text-accent">&gt;</span> Full Stack Developer
-              <span className="animate-pulse text-accent">|</span>
+            
+            {/* Texto animado estilo Typewriter */}
+            <p className="text-xl sm:text-2xl text-text-muted font-mono mt-2 flex items-center gap-2 min-h-[36px]">
+              <span className="text-accent">&gt;</span>
+              <span>{displayedText}</span>
+              <span className="animate-pulse text-accent font-bold">|</span>
             </p>
           </div>
 
@@ -133,6 +174,7 @@ export default function Hero() {
               <ArrowUpRight className="w-4 h-4" />
             </a>
 
+
             <a
               href="mailto:wahc1998@gmail.com"
               className="flex items-center gap-2 bg-bg-card hover:bg-border-main text-text-main border border-border-main font-medium px-5 py-3 rounded-xl transition-all backdrop-blur-sm active:scale-95"
@@ -140,6 +182,7 @@ export default function Hero() {
               <Mail className="w-4 h-4 text-accent" />
               Contactar
             </a>
+
 
             {/* Redes Sociales al lado de Contactar */}
             <div className="flex items-center gap-2">
@@ -156,6 +199,7 @@ export default function Hero() {
                 </svg>
               </a>
 
+
               {/* LinkedIn */}
               <a
                 href="https://www.linkedin.com/in/wahc/"
@@ -171,6 +215,8 @@ export default function Hero() {
             </div>
           </div>
 
+
+
           {/* Preguntas Rápidas */}
           <div className="pt-4 border-t border-border-main">
             <p className="text-xs text-accent font-mono mb-2 flex items-center gap-1.5">
@@ -185,7 +231,7 @@ export default function Hero() {
                 <button
                   key={i}
                   onClick={() => handleSend(q)}
-                  className="text-xs bg-bg-card hover:border-accent border border-border-main text-text-muted hover:text-text-main px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 group"
+                  className="text-xs bg-bg-card hover:border-accent border border-border-main text-text-muted hover:text-text-main px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 group cursor-pointer"
                 >
                   <span>"{q}"</span>
                   <Send className="w-3 h-3 text-text-muted group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
@@ -202,7 +248,7 @@ export default function Hero() {
             
             <div className="relative bg-bg-card border border-border-main rounded-2xl overflow-hidden shadow-2xl backdrop-blur-xl h-[420px] flex flex-col">
               
-              {/* Header de la Ventana con Pestañas (IA Primero) */}
+              {/* Header de la Ventana con Pestañas */}
               <div className="bg-bg-main/60 px-4 py-2.5 border-b border-border-main flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-red-500/80" />
@@ -210,11 +256,11 @@ export default function Hero() {
                   <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
                 </div>
 
-                {/* Tabs Selector (IA primero) */}
+                {/* Tabs Selector */}
                 <div className="flex items-center gap-1 bg-bg-main p-1 rounded-lg border border-border-main text-xs font-mono">
                   <button
                     onClick={() => setActiveTab('chat')}
-                    className={`px-2.5 py-1 rounded-md transition-all flex items-center gap-1.5 ${
+                    className={`px-2.5 py-1 rounded-md transition-all flex items-center gap-1.5 cursor-pointer ${
                       activeTab === 'chat'
                         ? 'bg-bg-card text-accent font-semibold shadow-sm'
                         : 'text-text-muted hover:text-text-main'
@@ -224,7 +270,7 @@ export default function Hero() {
                   </button>
                   <button
                     onClick={() => setActiveTab('terminal')}
-                    className={`px-2.5 py-1 rounded-md transition-all flex items-center gap-1.5 ${
+                    className={`px-2.5 py-1 rounded-md transition-all flex items-center gap-1.5 cursor-pointer ${
                       activeTab === 'terminal'
                         ? 'bg-bg-card text-accent font-semibold shadow-sm'
                         : 'text-text-muted hover:text-text-main'
@@ -235,11 +281,9 @@ export default function Hero() {
                 </div>
               </div>
 
-              {/* PESTAÑA 1: Chat IA (Por defecto) */}
+              {/* PESTAÑA 1: Chat IA */}
               {activeTab === 'chat' && (
                 <div className="flex flex-col flex-1 h-full overflow-hidden">
-                  
-                  {/* Lista de Mensajes con el ref correcto */}
                   <div 
                     ref={chatContainerRef} 
                     className="flex-1 p-4 overflow-y-auto space-y-3 text-xs sm:text-sm"
@@ -279,10 +323,8 @@ export default function Hero() {
                         <span>Willy está pensando...</span>
                       </div>
                     )}
-                    {/* <div ref={chatEndRef} /> ya no hace falta esta línea */}
                   </div>
 
-                  {/* Input del Chat */}
                   <form
                     onSubmit={(e) => {
                       e.preventDefault();
@@ -300,13 +342,14 @@ export default function Hero() {
                     <button
                       type="submit"
                       disabled={loading || !input.trim()}
-                      className="p-2 bg-accent text-bg-main rounded-lg hover:opacity-90 disabled:opacity-50 transition-all"
+                      className="p-2 bg-accent text-bg-main rounded-lg hover:opacity-90 disabled:opacity-50 transition-all cursor-pointer"
                     >
                       <CornerDownLeft className="w-3.5 h-3.5" />
                     </button>
                   </form>
                 </div>
               )}
+
               {/* PESTAÑA 2: Vista Terminal (JSON) */}
               {activeTab === 'terminal' && (
                 <div className="p-5 font-mono text-xs sm:text-sm space-y-3 text-text-main leading-relaxed overflow-y-auto flex-1">
