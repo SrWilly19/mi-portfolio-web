@@ -15,7 +15,7 @@ export const PROJECTS_DATA: Project[] = [
       'Optimización de imágenes WebP y UI oscura responsiva.'
     ],
     tags: ['React', 'Vite', 'Node.js', 'Tailwind CSS', 'Vercel'],
-    image: './public/projects/grand-line-birth.webp',
+    image: '/projects/grand-line-birth.webp',
     demoUrl: 'https://grand-line-birth.vercel.app'
   },
   {
@@ -31,7 +31,7 @@ export const PROJECTS_DATA: Project[] = [
       'Panel de control centralizado para supervisión de laboratorio.'
     ],
     tags: ['React', 'TypeScript', 'Node.js', 'WebSockets', 'Tailwind CSS'],
-    image: '/projects/hp-3d.jpg'
+    image: '/projects/hp.webp'
   },
   {
     id: 'pancake-swap-clone',
@@ -44,7 +44,7 @@ export const PROJECTS_DATA: Project[] = [
       'Ajustes de UI/UX y animaciones fluidas.'
     ],
     tags: ['React', 'Tailwind CSS', 'Vercel'],
-    image: '/projects/pancakeswap.jpg',
+    image: '/projects/replica-pancake-swap-vercel-app.webp',
     demoUrl: 'https://replica-pancake-swap.vercel.app/'
   },
 
@@ -60,7 +60,7 @@ export const PROJECTS_DATA: Project[] = [
       'Corrección de errores estructurales y optimización multi-idioma.'
     ],
     tags: ['JavaScript', 'Bootstrap', 'jQuery', 'HTML5', 'CSS3', 'SEO'],
-    image: '/projects/sofkredit.jpg',
+    image: '/projects/sofkredit.webp',
     demoUrl: 'https://sofkredit.com/es'
   },
   {
@@ -74,7 +74,7 @@ export const PROJECTS_DATA: Project[] = [
       'Optimización de carga y estructura SEO para captación orgánica.'
     ],
     tags: ['JavaScript', 'Bootstrap', 'jQuery', 'HTML5', 'CSS3', 'SEO'],
-    image: '/projects/finandon.jpg',
+    image: '/projects/finandon.webp',
     demoUrl: 'https://finandon.com/es'
   },
   {
@@ -88,7 +88,7 @@ export const PROJECTS_DATA: Project[] = [
       'Auditorías SEO y corrección de bugs en maquetación.'
     ],
     tags: ['JavaScript', 'Bootstrap', 'jQuery', 'HTML5', 'CSS3', 'SEO'],
-    image: '/projects/kreditiweb.jpg',
+    image: '/projects/kreditiweb.webp',
     demoUrl: 'https://kreditiweb.com/es'
   },
   {
@@ -102,7 +102,7 @@ export const PROJECTS_DATA: Project[] = [
       'Rediseño de secciones completas y cabeceras del portal.'
     ],
     tags: ['JavaScript', 'Bootstrap', 'jQuery', 'HTML5', 'CSS3', 'SEO'],
-    image: '/projects/preslo.jpg',
+    image: '/projects/preslo.webp',
     demoUrl: 'https://preslo.com/es'
   },
 
@@ -118,7 +118,7 @@ export const PROJECTS_DATA: Project[] = [
       'Refactorización de código backend/frontend y corrección de errores del sistema.'
     ],
     tags: ['PHP', 'JavaScript', 'MySQL', 'HTML5/CSS3'],
-    image: '/projects/intranet-optometristas.jpg',
+    image: '/projects/intranetoptometristas.webp',
     demoUrl: 'https://intranetoptometristas.es/'
   },
   {
@@ -132,7 +132,7 @@ export const PROJECTS_DATA: Project[] = [
       'Maquetación responsiva personalizada y optimización SEO.'
     ],
     tags: ['WordPress', 'Elementor', 'JavaScript', 'CSS3'],
-    image: '/projects/aural-cepedal.jpg',
+    image: '/projects/auralcepedalchiclana.webp',
     demoUrl: 'https://auralcepedalchiclana.com/'
   },
   {
@@ -146,7 +146,7 @@ export const PROJECTS_DATA: Project[] = [
       'Alineación de la web con los estándares modernos de accesibilidad y SEO.'
     ],
     tags: ['PHP', 'JavaScript', 'HTML5', 'CSS3'],
-    image: '/projects/cnoo.jpg',
+    image: '/projects/cnoo.webp',
     demoUrl: 'https://www.cnoo.es/'
   },
   {
@@ -160,7 +160,7 @@ export const PROJECTS_DATA: Project[] = [
       'Mantenimiento del servidor de archivos y cargas periódicas.'
     ],
     tags: ['WordPress', 'PHP', 'JavaScript', 'HTML5/CSS3'],
-    image: '/projects/gacetaudio.jpg',
+    image: '/projects/gacetaudio.webp',
     demoUrl: 'https://www.revistagacetaudio.es/'
   },
   {
@@ -174,7 +174,7 @@ export const PROJECTS_DATA: Project[] = [
       'Inyección de código personalizado para funcionalidades a medida.'
     ],
     tags: ['WordPress', 'Elementor', 'CSS3', 'JavaScript'],
-    image: '/projects/centro-auditivo-perea.jpg',
+    image: '/projects/centroauditivoperea.webp',
     demoUrl: 'https://centroauditivoperea.com/'
   },
   {
@@ -188,7 +188,7 @@ export const PROJECTS_DATA: Project[] = [
       'Integración de formularios de contacto y llamada a la acción.'
     ],
     tags: ['WordPress', 'Elementor', 'CSS3', 'JavaScript'],
-    image: '/projects/opticas-perea.jpg',
+    image: '/projects/opticaspereavision.webp',
     demoUrl: 'https://opticaspereavision.es/'
   },
   {
@@ -202,7 +202,7 @@ export const PROJECTS_DATA: Project[] = [
       'Adaptabilidad 100% móvil y optimización de recursos.'
     ],
     tags: ['PHP', 'JavaScript', 'HTML5', 'CSS3'],
-    image: '/projects/la-gafetina.jpg',
+    image: '/projects/lagafetina.webp',
     demoUrl: 'https://lagafetina.com/plan-cuidado-audiologia/'
   },
   {
@@ -216,7 +216,7 @@ export const PROJECTS_DATA: Project[] = [
       'Optimización de metaetiquetas y estructura SEO.'
     ],
     tags: ['WordPress', 'Elementor', 'JavaScript', 'SEO'],
-    image: '/projects/rebeca-ayala.jpg',
+    image: '/projects/rebeca-ayala.webp',
     demoUrl: 'https://www.centroauditivorebecaayala.com/'
   },
   {
@@ -230,7 +230,7 @@ export const PROJECTS_DATA: Project[] = [
       'Ajustes de estilo y componentes dinámicos con código personalizado.'
     ],
     tags: ['WordPress', 'Elementor', 'JavaScript', 'SEO'],
-    image: '/projects/macsony.jpg',
+    image: '/projects/macsony.webp',
     demoUrl: 'https://macsony.es/'
   },
   {
@@ -244,7 +244,7 @@ export const PROJECTS_DATA: Project[] = [
       'Integración de elementos flotantes interactivos.'
     ],
     tags: ['WordPress', 'Elementor', 'JavaScript', 'SEO'],
-    image: '/projects/sonibel.jpg',
+    image: '/projects/sonibelaudinea.webp',
     demoUrl: 'http://sonibelaudinea.com/'
   },
   {
@@ -258,7 +258,7 @@ export const PROJECTS_DATA: Project[] = [
       'Limpieza y optimización de código legado.'
     ],
     tags: ['PHP', 'JavaScript', 'HTML5', 'CSS3'],
-    image: '/projects/funsavi.jpg',
+    image: '/projects/funsavi.webp',
     demoUrl: 'https://www.funsavi.es/'
   },
   {
@@ -272,6 +272,6 @@ export const PROJECTS_DATA: Project[] = [
       'Estructuración SEO completa para campañas de marketing.'
     ],
     tags: ['WordPress', 'Elementor', 'JavaScript', 'SEO'],
-    image: '/projects/audionex.jpg'
+    image: '/projects/audionex.webp'
   }
 ];

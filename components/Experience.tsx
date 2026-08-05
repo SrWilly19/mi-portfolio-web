@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Briefcase, Calendar, MapPin, Sparkles, ChevronRight } from 'lucide-react';
 import { EXPERIENCES } from '../data/experienceData';
 
-// Componente individual para controlar el scroll de cada tarjeta
 function ExperienceCard({ item, index }: { item: typeof EXPERIENCES[0]; index: number }) {
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -14,13 +13,12 @@ function ExperienceCard({ item, index }: { item: typeof EXPERIENCES[0]; index: n
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          // Opcional: una vez visible, dejamos de observar para mejorar rendimiento
           observer.unobserve(entry.target);
         }
       },
       {
-        threshold: 0.15, // Se activa cuando el 15% de la tarjeta es visible
-        rootMargin: '0px 0px -50px 0px', // Un pequeño margen inferior para que se active justo antes
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px',
       }
     );
 
@@ -34,21 +32,25 @@ function ExperienceCard({ item, index }: { item: typeof EXPERIENCES[0]; index: n
   return (
     <div
       ref={cardRef}
-      style={{ transitionDelay: `${index * 100}ms` }} // Retardo en cascada si aparecen varias a la vez
+      style={{ transitionDelay: `${index * 100}ms` }}
       className={`relative pl-6 sm:pl-10 group transition-all duration-700 ease-out transform ${
         isVisible
           ? 'opacity-100 translate-x-0 scale-100'
           : 'opacity-0 translate-x-12 scale-95 pointer-events-none'
       }`}
     >
-      {/* Nodo/Punto de la línea de tiempo con animación de iluminación */}
+      {/* 
+        NODO DE LA LÍNEA DE TIEMPO (Círculo Reactivo)
+        - Normal: Círculo hueco con fondo bg-bg-main.
+        - Hover (al pasar sobre la tarjeta): Se rellena (bg-accent), se agranda (scale-125) y brilla.
+      */}
       <div
-        className={`absolute -left-[9px] top-1.5 w-4 h-4 rounded-full border-2 transition-all duration-500 ${
+        className={`absolute -left-[9px] top-6 w-4 h-4 rounded-full border-2 z-10 transition-all duration-300 transform ${
           isVisible
             ? item.current
-              ? 'bg-accent border-bg-main ring-4 ring-accent/30 animate-pulse'
-              : 'bg-accent border-accent shadow-[0_0_12px_var(--accent)]'
-            : 'bg-bg-main border-border-main'
+              ? 'bg-bg-main border-accent ring-4 ring-accent/20 group-hover:bg-accent group-hover:scale-125 group-hover:ring-accent/40'
+              : 'bg-bg-main border-border-main group-hover:border-accent group-hover:bg-accent group-hover:scale-125 group-hover:shadow-[0_0_15px_var(--accent)]'
+            : 'bg-bg-main border-border-main opacity-0'
         }`}
       />
 
@@ -112,7 +114,7 @@ function ExperienceCard({ item, index }: { item: typeof EXPERIENCES[0]; index: n
           {item.skills.map((skill) => (
             <span
               key={skill}
-              className="text-[11px] font-mono bg-bg-main text-text-main px-2.5 py-1 rounded-md border border-border-main"
+              className="text-[11px] font-mono bg-bg-main text-text-main px-2.5 py-1 rounded-md border border-border-main group-hover:border-accent/30 transition-colors"
             >
               {skill}
             </span>

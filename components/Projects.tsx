@@ -12,6 +12,39 @@ import {
   Pause,
   Play
 } from 'lucide-react';
+import { TechIcon } from './TechIcon';
+
+// Subcomponente robusto para manejar la imagen o mostrar el fallback (Globo)
+function ProjectImage({ src, alt, company }: { src: string; alt: string; company: string }) {
+  const [hasError, setHasError] = useState<boolean>(false);
+
+  // Si cambia la URL del proyecto, reseteamos el estado de error
+  useEffect(() => {
+    setHasError(false);
+  }, [src]);
+
+  // Si la imagen falla o no existe, mostramos el contenedor del Globo
+  if (hasError || !src) {
+    return (
+      <div className="w-full h-full bg-gradient-to-br from-bg-card to-bg-main flex flex-col items-center justify-center gap-2 p-4 text-center select-none">
+        <Globe className="w-10 h-10 text-accent/40" />
+        <span className="text-xs font-mono text-text-muted">{company}</span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+      onError={() => {
+        console.warn(`[ProjectImage] No se pudo cargar: ${src}`);
+        setHasError(true);
+      }}
+    />
+  );
+}
 
 export default function Projects() {
   const [filter, setFilter] = useState<string>('Todas');
@@ -24,7 +57,7 @@ export default function Projects() {
     ? PROJECTS_DATA 
     : PROJECTS_DATA.filter(p => p.category === filter);
 
-  // Funciones de navegación con useCallback para usarlas en el timer
+  // Funciones de navegación con useCallback
   const handleNext = useCallback(() => {
     setCurrentIndex((prev) => (prev === filteredProjects.length - 1 ? 0 : prev + 1));
   }, [filteredProjects.length]);
@@ -33,7 +66,7 @@ export default function Projects() {
     setCurrentIndex((prev) => (prev === 0 ? filteredProjects.length - 1 : prev - 1));
   }, [filteredProjects.length]);
 
-  // 1. Lógica de Autoplay Inteligente (Cambia cada 5s si no está pausado)
+  // Lógica de Autoplay Inteligente (Cambia cada 5s si no está pausado)
   useEffect(() => {
     if (isPaused || filteredProjects.length <= 1) return;
 
@@ -44,7 +77,7 @@ export default function Projects() {
     return () => clearInterval(interval);
   }, [isPaused, handleNext, filteredProjects.length]);
 
-  // Reiniciar índice a 0 si la categoría cambia y el índice actual queda fuera de rango
+  // Reiniciar índice al cambiar filtro
   const handleFilterChange = (cat: string) => {
     setFilter(cat);
     setCurrentIndex(0);
@@ -85,8 +118,8 @@ export default function Projects() {
       {/* CARRUSEL TIPO PROFUNDIDAD */}
       <div 
         className="relative w-full mx-auto min-h-[620px] flex flex-col items-center justify-center"
-        onMouseEnter={() => setIsPaused(true)}  /* Pausa cuando pasa el ratón */
-        onMouseLeave={() => setIsPaused(false)} /* Reanuda al salir */
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
       >
         
         {/* Indicador y Estado del Autoplay */}
@@ -172,9 +205,11 @@ export default function Projects() {
                       {project.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="px-2.5 py-1 rounded bg-bg-main border border-border-main text-[10px] font-mono text-text-muted"
+                          className=" inline-flex flex-row items-center gap-1.5 px-2.5 py-1 rounded bg-bg-main border border-border-main text-[10px] font-mono text-text-muted"
                         >
-                          {tag}
+                          <TechIcon name={tag} />
+
+                          <span>{tag}</span>
                         </span>
                       ))}
                     </div>
@@ -198,18 +233,13 @@ export default function Projects() {
                   </div>
                 </div>
 
-                {/* Imagen Lateral Derecha */}
-                <div className="w-full md:w-[300px] lg:w-[320px] h-52 md:h-auto bg-bg-main border border-border-main rounded-xl overflow-hidden shrink-0 relative order-1 md:order-2 group">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                {/* Imagen Lateral Derecha limpia sin capas superpuestas */}
+                <div className="w-full md:w-[300px] lg:w-[320px] h-52 md:h-[320px] bg-bg-main border border-border-main rounded-xl overflow-hidden shrink-0 relative order-1 md:order-2 group">
+                  <ProjectImage 
+                    src={project.image} 
+                    alt={project.title} 
+                    company={project.company} 
                   />
-                  <div className="absolute inset-0 bg-gradient-to-br from-bg-card to-bg-main flex flex-col items-center justify-center gap-2 -z-0 p-4 text-center">
-                    <Globe className="w-10 h-10 text-accent/40" />
-                    <span className="text-xs font-mono text-text-muted">{project.company}</span>
-                  </div>
                 </div>
 
               </div>
@@ -217,10 +247,8 @@ export default function Projects() {
           })}
         </div>
 
-        {/* Navegación Inferior: Botones + Dots interactivos */}
+        {/* Navegación Inferior */}
         <div className="mt-4 flex flex-col sm:flex-row items-center justify-between w-full max-w-[820px] gap-4 z-30 px-2">
-          
-          {/* Botones Flecha */}
           <div className="flex items-center gap-3">
             <button 
               onClick={handlePrev}
@@ -238,7 +266,6 @@ export default function Projects() {
             </button>
           </div>
 
-          {/* Dots de Paginación Rápida */}
           <div className="flex items-center gap-1.5 overflow-x-auto max-w-full py-1">
             {filteredProjects.map((_, idx) => (
               <button
