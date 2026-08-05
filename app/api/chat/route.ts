@@ -6,11 +6,8 @@ import { EXPERIENCES } from '@/data/experienceData';
 import { PROJECTS_DATA } from '@/data/projectsData';
 import { SKILL_CATEGORIES } from '@/data/skillsData';
 
-// Inicializamos el cliente apuntando a los servidores ultrarrápidos de Groq
-const openai = new OpenAI({
-  apiKey: process.env.GROQ_API_KEY,
-  baseURL: 'https://api.groq.com/openai/v1',
-});
+// 1. Evita que Next.js intente generar esta API estáticamente durante el build
+export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
   try {
@@ -19,6 +16,12 @@ export async function POST(req: Request) {
     if (!message || typeof message !== 'string') {
       return NextResponse.json({ error: 'Mensaje no válido' }, { status: 400 });
     }
+
+    // 2. Inicializamos el cliente DENTRO de la función POST para que solo actúe al recibir peticiones
+    const openai = new OpenAI({
+      apiKey: process.env.GROQ_API_KEY || 'dummy_key_build', // Clave alternativa por seguridad en compilación
+      baseURL: 'https://api.groq.com/openai/v1',
+    });
 
     const systemInstruction = `
       Eres "Willy", el asistente virtual interactivo con IA del portafolio de Wellington A. Hidalgo.
@@ -54,7 +57,7 @@ export async function POST(req: Request) {
         { role: 'system', content: systemInstruction },
         { role: 'user', content: message },
       ],
-      temperature: 0.6, // Bajamos un pelín la temperatura a 0.6 para respuestas más precisas
+      temperature: 0.6,
       max_tokens: 350,
     });
 
