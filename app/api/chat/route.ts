@@ -1,4 +1,4 @@
-import OpenAI from 'openai';
+import Groq from 'groq-sdk';
 import { NextResponse } from 'next/server';
 
 // Importamos los datos detallados de tu portafolio
@@ -6,7 +6,6 @@ import { EXPERIENCES } from '@/data/experienceData';
 import { PROJECTS_DATA } from '@/data/projectsData';
 import { SKILL_CATEGORIES } from '@/data/skillsData';
 
-// 1. Evita que Next.js intente generar esta API estáticamente durante el build
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
@@ -17,10 +16,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Mensaje no válido' }, { status: 400 });
     }
 
-    // 2. Inicializamos el cliente DENTRO de la función POST para que solo actúe al recibir peticiones
-    const openai = new OpenAI({
-      apiKey: process.env.GROQ_API_KEY || 'dummy_key_build', // Clave alternativa por seguridad en compilación
-      baseURL: 'https://api.groq.com/openai/v1',
+    // 1. Obtenemos la API Key limpia, sin espacios ni saltos de línea extras
+    const rawKey = process.env.GROQ_API_KEY || '';
+    // Si viene duplicada o con saltos de línea, cogemos únicamente la primera línea limpia
+    const cleanApiKey = rawKey.split(/[\r\n]+/)[0].trim();
+
+    // 2. Inicializamos el SDK oficial de Groq
+    const groq = new Groq({
+      apiKey: cleanApiKey,
     });
 
     const systemInstruction = `
@@ -51,7 +54,7 @@ export async function POST(req: Request) {
       - Invita de forma natural a agendar una llamada o enviar un correo directo a wahc1998@gmail.com.
     `;
 
-    const completion = await openai.chat.completions.create({
+    const completion = await groq.chat.completions.create({
       model: 'llama-3.3-70b-versatile',
       messages: [
         { role: 'system', content: systemInstruction },
