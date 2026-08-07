@@ -117,7 +117,7 @@ export const PROJECTS_DATA: Project[] = [
       'Optimización del flujo de tramitación de certificados oficiales.',
       'Refactorización de código backend/frontend y corrección de errores del sistema.'
     ],
-    tags: ['PHP', 'JavaScript', 'MySQL', 'HTML5/CSS3'],
+    tags: ['PHP', 'JavaScript', 'MySQL', 'HTML5', 'CSS3'],
     image: '/projects/intranetoptometristas.webp',
     demoUrl: 'https://intranetoptometristas.es/'
   },
@@ -159,7 +159,7 @@ export const PROJECTS_DATA: Project[] = [
       'Modificación de maquetación en columnas y formularios interactivos.',
       'Mantenimiento del servidor de archivos y cargas periódicas.'
     ],
-    tags: ['WordPress', 'PHP', 'JavaScript', 'HTML5/CSS3'],
+    tags: ['WordPress', 'PHP', 'JavaScript', 'HTML5', 'CSS3'],
     image: '/projects/gacetaudio.webp',
     demoUrl: 'https://www.revistagacetaudio.es/'
   },
