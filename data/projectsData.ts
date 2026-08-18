@@ -249,7 +249,7 @@ export const PROJECTS_DATA: Project[] = [
   },
   {
     id: 'funsavi',
-    title: 'Funsavi — Fundación San Vital',
+    title: 'Funsavi — Fundación Salud Visual',
     company: 'BE ON RETAIL',
     category: 'Frontend',
     description: 'Depuración y corrección de elementos rotos y malas prácticas en la web corporativa.',
